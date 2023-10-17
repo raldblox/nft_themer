@@ -74,7 +74,10 @@ contract NFTThemer {
         // mint to ThemedNFT
     }
 
-    function tokenizeAsset(string memory _imageUrl, address _receiver) external payable {
+    function tokenizeAsset(
+        string memory _imageUrl,
+        address _receiver
+    ) external payable {
         // Mint ThemedNFT
     }
 
@@ -83,21 +86,38 @@ contract NFTThemer {
         string memory _imageUrl,
         bool _isNFT
     ) external payable {
-        require(supportedPaymentTokens[_tokenAddress].isSupported, "Token not supported");
-        uint256 paymentAmount = supportedPaymentTokens[_tokenAddress].paymentAmount;
+        require(
+            supportedPaymentTokens[_tokenAddress].isSupported,
+            "Token not supported"
+        );
+        uint256 paymentAmount = supportedPaymentTokens[_tokenAddress]
+            .paymentAmount;
 
         require(msg.value >= paymentAmount, "Payment not enough");
 
         assetAddresses[assetId] = _assetAddress;
 
         IERC20 paymentToken = supportedPaymentTokens[_tokenAddress].token;
-        require(paymentToken.balanceOf(msg.sender) >= paymentAmount, "Insufficient tokens");
+        require(
+            paymentToken.balanceOf(msg.sender) >= paymentAmount,
+            "Insufficient tokens"
+        );
 
-        require(paymentToken.transferFrom(msg.sender, address(this), paymentAmount), "Token transfer failed");
+        require(
+            paymentToken.transferFrom(msg.sender, address(this), paymentAmount),
+            "Token transfer failed"
+        );
 
-        require(paymentToken.transfer(owner(), paymentAmount), "Token transfer to owner failed");
+        bool success = paymentToken.transfer(masterAdmin, paymentAmount);
+        require(success, "Token transfer to masterAdmin failed");
+
+        // checks if NFT already
+        if (!_isNFT) {
+            // tokenize asset
+        }
+
+        // add theming to NFT
 
         emit AssetThemed(assetId, msg.sender);
     }
-}
 }
