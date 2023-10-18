@@ -24,7 +24,7 @@ export default () => {
                 <div className="grid grid-cols-4 gap-16">
                     <div className="h-full space-y-8 col-span-2 p-8 rounded-[50px] border-2 border-gray-600 bg-[#ffffff39]">
                         <h1 className="text-2xl font-bold text-center">Select Theme</h1>
-                        <ul className="grid rounded-[30px] content-start grid-cols-3 gap-4 aspect-square">
+                        <ul className="grid z-10 rounded-[30px] content-start grid-cols-3 gap-4 aspect-square">
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
@@ -35,23 +35,24 @@ export default () => {
                     </div>
                     <div className="h-full space-y-8 col-span-2 p-8 rounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
                         <h1 className="text-2xl font-bold text-center">Select Your NFT</h1>
-                        <ul className="grid rounded-[30px] content-start grid-cols-3 gap-4 overflow-y-scroll aspect-square">
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
+                        <ul className="grid z-10 rounded-[30px] content-start grid-cols-3 gap-4 overflow-y-scroll aspect-square">
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
                         </ul>
                     </div>
                 </div>
             </div>
+            <div className="absolute top-[110vh] z-0 inset-0 m-auto max-w-xs h-[100vh] blur-[118px] sm:max-w-md md:max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.2) 15%, rgba(14, 165, 233, 0.41) 15%, rgba(232, 121, 249, 0.26) 50%, rgba(79, 70, 229, 0.3) 110%)" }}></div>
         </section>
     )
 }
