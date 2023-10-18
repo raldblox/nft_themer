@@ -1,7 +1,8 @@
 export default () => {
     return (
-        <section>
-            <div className="max-w-screen-xl gap-12 px-4 mx-auto space-y-16 text-gray-200 py-28 md:px-8">
+        <section className="relative">
+            <div className="absolute top-[80vh] md:top-[50vh] z-0 inset-0 m-auto h-[100vh] md:h-[150vh] blur-[200px] max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.25) 0%, rgba(14, 165, 233, 0.25) 15%, rgba(232, 121, 249, 0.25) 50%, rgba(79, 70, 229, 0.3) 100%)" }}></div>
+            <div className="relative max-w-screen-xl gap-12 px-4 mx-auto space-y-16 text-gray-200 py-28 md:px-8">
                 <div className="max-w-3xl mx-auto space-y-5 text-center">
                     <h1 className="text-base font-medium text-[#00b8ff]">
                         Built to Make Your NFTs Pop! 🎉
@@ -21,38 +22,34 @@ export default () => {
                         </a>
                     </div>
                 </div>
-                <div className="grid grid-cols-4 gap-16">
-                    <div className="h-full space-y-8 col-span-2 p-8 rounded-[50px] border-2 border-gray-600 bg-[#ffffff39]">
+                <div className="grid grid-cols-2 gap-16">
+                    <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:rounded-[50px] border-2 border-gray-600 bg-[#ffffff39]">
                         <h1 className="text-2xl font-bold text-center">Select Theme</h1>
-                        <ul className="grid z-10 rounded-[30px] content-start grid-cols-3 gap-4 aspect-square">
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
+                        <ul className="grid z-10 rounded-[30px] aspect-square md:aspect-auto overflow-y-scroll content-start md:grid-cols-3 gap-4">
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
                             <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff85]"></li>
                         </ul>
                     </div>
-                    <div className="h-full space-y-8 col-span-2 p-8 rounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
+                    <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:ounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
                         <h1 className="text-2xl font-bold text-center">Select Your NFT</h1>
-                        <ul className="grid z-10 rounded-[30px] content-start grid-cols-3 gap-4 overflow-y-scroll aspect-square">
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
-                            <li className="col-span-1 rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                        <ul className="grid z-10 aspect-square md:aspect-auto rounded-lg md:rounded-[30px] content-start grid-cols-2 md:grid-cols-6 gap-4 overflow-y-scroll">
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
+                            <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff50] backdrop-blur-md"></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div className="absolute top-[110vh] z-0 inset-0 m-auto max-w-xs h-[100vh] blur-[200px] sm:max-w-md md:max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.25) 0%, rgba(14, 165, 233, 0.25) 15%, rgba(232, 121, 249, 0.25) 50%, rgba(79, 70, 229, 0.3) 100%)" }}></div>
         </section>
     )
 }
