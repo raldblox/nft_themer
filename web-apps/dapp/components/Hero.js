@@ -52,7 +52,7 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <div className="absolute top-[110vh] z-0 inset-0 m-auto max-w-xs h-[100vh] blur-[118px] sm:max-w-md md:max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.2) 15%, rgba(14, 165, 233, 0.41) 15%, rgba(232, 121, 249, 0.26) 50%, rgba(79, 70, 229, 0.3) 110%)" }}></div>
+            <div className="absolute top-[110vh] z-0 inset-0 m-auto max-w-xs h-[100vh] blur-[200px] sm:max-w-md md:max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.25) 0%, rgba(14, 165, 233, 0.25) 15%, rgba(232, 121, 249, 0.25) 50%, rgba(79, 70, 229, 0.3) 100%)" }}></div>
         </section>
     )
 }
