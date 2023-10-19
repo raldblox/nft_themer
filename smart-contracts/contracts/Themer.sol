@@ -3,7 +3,6 @@ pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./tokens/ThemedERC721.sol";
 
@@ -36,22 +35,21 @@ contract NFTThemer {
     // Event to log asset themed
     event AssetThemed(uint256 indexed assetId, address indexed creator);
 
-    constructor(address _initialTokens) {
+    constructor(address _paymentToken) {
         masterAdmin = msg.sender;
-        addSupportedPaymentToken(addressOfToken, paymentAmount); // @note Add APE Token as payment token
-        themedNFT = new ThemedERC721();
+        addSupportedPaymentToken(_paymentToken, 1); // @note Add APE Token as payment token
+        themedNFT = new ThemedERC721(msg.sender, address(this));
     }
 
     modifier onlyAdmin() {
         require(masterAdmin == msg.sender, "Caller is not an admin");
-        paymentToken = IERC20(_paymentTokenAddress);
         _;
     }
 
     function addSupportedPaymentToken(
         address _tokenAddress,
         uint256 _paymentAmount
-    ) public onlyOwner {
+    ) public onlyAdmin {
         require(
             !supportedPaymentTokens[_tokenAddress].isSupported,
             "Token already supported"
@@ -74,30 +72,22 @@ contract NFTThemer {
         // mint to ThemedNFT
     }
 
-    function tokenizeAsset(
-        string memory _imageUrl,
-        address _receiver
-    ) external payable {
-        // Mint ThemedNFT
-    }
-
     function createThemedNFT(
         address _assetAddress,
+        address _paymentAddress,
         string memory _imageUrl,
         bool _isNFT
     ) external payable {
         require(
-            supportedPaymentTokens[_tokenAddress].isSupported,
+            supportedPaymentTokens[_paymentAddress].isSupported,
             "Token not supported"
         );
-        uint256 paymentAmount = supportedPaymentTokens[_tokenAddress]
+        uint256 paymentAmount = supportedPaymentTokens[_paymentAddress]
             .paymentAmount;
 
         require(msg.value >= paymentAmount, "Payment not enough");
 
-        assetAddresses[assetId] = _assetAddress;
-
-        IERC20 paymentToken = supportedPaymentTokens[_tokenAddress].token;
+        IERC20 paymentToken = supportedPaymentTokens[_paymentAddress].token;
         require(
             paymentToken.balanceOf(msg.sender) >= paymentAmount,
             "Insufficient tokens"

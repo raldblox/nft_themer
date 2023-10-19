@@ -17,7 +17,12 @@ contract ThemedERC721 is ERC721 {
         admin = _admin;
     }
 
-    function mint(address to, uint256 tokenId) public onlyOwner {
+    function mint(
+        address to,
+        uint256 tokenId,
+        bool isThemed,
+        address themeAddress
+    ) public {
         _mint(to, tokenId);
     }
 }
