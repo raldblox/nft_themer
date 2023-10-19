@@ -1,8 +1,15 @@
-# Sample Hardhat Project
+# NFT Themer
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+If no NFT, tokenize first then add themer.
+If there is NFT, fetch its TokenID and CollectionAddress, then collect NFT theme address.
 
-Try running some of the following tasks:
+TASKS:
+
+* [X] Create Mocked APE and other payment tokens
+* [ ] Create Asset Tokenizer just in case user doesnt have NFT yet
+* [ ] Create NFT Theme Interaface
+
+Some of the hardhat scripts:
 
 ```shell
 npx hardhat help
