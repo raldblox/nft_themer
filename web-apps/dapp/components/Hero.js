@@ -190,7 +190,7 @@ export default () => {
                             </div>}
                     </div>
                     <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:ounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
-                        <h1 className="text-2xl font-bold text-center">Select Your NFT</h1>
+                        <h1 className="text-2xl font-bold text-center">Your Themed NFT</h1>
                         <ul className="grid z-10 aspect-square md:aspect-auto rounded-lg md:rounded-[30px] content-start grid-cols-2 md:grid-cols-6 gap-4 overflow-y-scroll">
                             <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff] backdrop-blur-md"></li>
                             <li className="col-span-1 rounded-lg md:rounded-[30px] aspect-square border-1 border-gray-700 bg-[#ffffff] backdrop-blur-md"></li>
