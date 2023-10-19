@@ -18,7 +18,7 @@ contract NFTThemer {
         uint256 paymentAmount;
     }
 
-    mapping(address => SupportedPaymentToken) public supportedPaymentTokens;
+    mapping(address => SupportedPaymentToken) public paymentTokens;
     address[] public supportedPaymentTokenAddresses;
 
     struct ThemedNFT {
@@ -37,7 +37,7 @@ contract NFTThemer {
 
     constructor(address _paymentToken) {
         masterAdmin = msg.sender;
-        addSupportedPaymentToken(_paymentToken, 1); // @note Add APE Token as payment token
+        addSupportedPaymentToken(_paymentToken, 1 ether); // @note Add APE Token as payment token
         themedNFT = new ThemedERC721(msg.sender, address(this));
     }
 
@@ -51,12 +51,12 @@ contract NFTThemer {
         uint256 _paymentAmount
     ) public onlyAdmin {
         require(
-            !supportedPaymentTokens[_tokenAddress].isSupported,
+            !paymentTokens[_tokenAddress].isSupported,
             "Token already supported"
         );
 
         IERC20 token = IERC20(_tokenAddress);
-        supportedPaymentTokens[_tokenAddress] = SupportedPaymentToken(
+        paymentTokens[_tokenAddress] = SupportedPaymentToken(
             token,
             true,
             _paymentAmount
@@ -79,15 +79,15 @@ contract NFTThemer {
         bool _isNFT
     ) external payable {
         require(
-            supportedPaymentTokens[_paymentAddress].isSupported,
+            paymentTokens[_paymentAddress].isSupported,
             "Token not supported"
         );
-        uint256 paymentAmount = supportedPaymentTokens[_paymentAddress]
-            .paymentAmount;
+        uint256 paymentAmount = paymentTokens[_paymentAddress].paymentAmount;
 
         require(msg.value >= paymentAmount, "Payment not enough");
 
-        IERC20 paymentToken = supportedPaymentTokens[_paymentAddress].token;
+        IERC20 paymentToken = paymentTokens[_paymentAddress].token;
+
         require(
             paymentToken.balanceOf(msg.sender) >= paymentAmount,
             "Insufficient tokens"
@@ -98,16 +98,35 @@ contract NFTThemer {
             "Token transfer failed"
         );
 
-        bool success = paymentToken.transfer(masterAdmin, paymentAmount);
-        require(success, "Token transfer to masterAdmin failed");
+        // (bool success, bytes memory data) = address(paymentToken).call(
+        //     abi.encodeWithSelector(
+        //         paymentToken.transferFrom.selector,
+        //         msg.sender,
+        //         address(this),
+        //         paymentAmount
+        //     )
+        // );
+        // require(
+        //     success && (data.length == 0 || abi.decode(data, (bool))),
+        //     "Token transfer failed"
+        // );
 
-        // checks if NFT already
+        // NFT factory minting tx
+
+        uint256 newToken;
+
         if (!_isNFT) {
-            // tokenize asset
+            newToken = themedNFT.mint(msg.sender);
+        } else {
+            newToken = themedNFT.mint(msg.sender);
         }
 
         // add theming to NFT
 
         emit AssetThemed(assetId, msg.sender);
+    }
+
+    function getFactory() public view returns (address) {
+        return address(themedNFT);
     }
 }

@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ThemedERC721 is ERC721 {
+    uint256 tokenIDs;
     address themer;
     address admin;
 
@@ -12,17 +13,13 @@ contract ThemedERC721 is ERC721 {
         address _admin,
         address _themer
     ) ERC721("Themed NFT", "themedNFT") {
-        _mint(msg.sender, 1);
         themer = _themer;
         admin = _admin;
     }
 
-    function mint(
-        address to,
-        uint256 tokenId,
-        bool isThemed,
-        address themeAddress
-    ) public {
-        _mint(to, tokenId);
+    function mint(address to) public returns (uint256) {
+        tokenIDs++;
+        _safeMint(to, tokenIDs);
+        return tokenIDs;
     }
 }
