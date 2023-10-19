@@ -5,6 +5,7 @@ import { Context } from "./Providers";
 import Dropzone from "react-dropzone";
 import { NFTStorage } from "nft.storage";
 import Card from "./Card";
+import Network from "./Network";
 
 export default () => {
     const { connectWallet, connectedWallet } = useContext(Context);
@@ -14,7 +15,7 @@ export default () => {
     const [uploading, setUploading] = useState("")
 
     const [steps, setStep] = useState({
-        stepsItems: ["Upload", "Theming", "Select Network", "Done"],
+        stepsItems: ["Upload", "Theming", "Payment", "Done"],
         currentStep: 0
     })
 
@@ -105,7 +106,7 @@ export default () => {
                             {connectedWallet ? <>{connectedWallet.slice(0, 7)}...{connectedWallet.slice(-5)}</> : "Connect Wallet"}
                         </button>
                         <button className="px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:text-gray-500 active:bg-gray-100">
-                            Tokenize
+                            $APE Faucet
                         </button>
                     </div>
                 </div>
@@ -161,7 +162,7 @@ export default () => {
                         {steps.currentStep == 1 &&
                             <div className="grid-cols-3 p-8 flex items-center justify-center mx-auto bg-transparent rounded-[30px]">
                                 {image && (
-                                    <div className="space-y-4 rounded-[30px]">
+                                    <div className="space-y-8 rounded-[30px]">
                                         <img src={image} alt="Uploaded" className="h-full rounded-3xl" />
                                         <div className="flex justify-center gap-4">
                                             <button onClick={clearImage} className="text-lg font-bold text-white">Clear Image</button>
@@ -173,10 +174,18 @@ export default () => {
                                 )}
                             </div>}
                         {steps.currentStep == 2 &&
-                            <div className="z-10 flex justify-center w-full gap-4">
+                            <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={imageURL} />
                                 <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     Continue
+                                </button>
+                            </div>}
+                        {steps.currentStep == 3 &&
+                            <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
+                                <Card image={imageURL} />
+                                <Network />
+                                <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
+                                    Process
                                 </button>
                             </div>}
                     </div>
