@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "../interfaces/ITheme.sol";
 
-contract ThemedERC721 is ERC721 {
+contract ThemedERC721 is ERC721("Themed NFT", "themedNFT"), Ownable {
     uint256 tokenIds;
     address themer;
     address admin;
@@ -22,10 +22,7 @@ contract ThemedERC721 is ERC721 {
     mapping(uint256 => TokenData) tokenData;
     mapping(uint256 => TokenData) linkedNFT;
 
-    constructor(
-        address _admin,
-        address _themer
-    ) ERC721("Themed NFT", "themedNFT") {
+    constructor(address _admin, address _themer) Ownable(_admin) {
         themer = _themer;
         admin = _admin;
     }
