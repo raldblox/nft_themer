@@ -54,8 +54,7 @@ export const Providers = (props) => {
 
     const value = {
         connectWallet,
-        connectedWallet,
-        steps, setStep
+        connectedWallet
     };
 
     return <Context.Provider value={value}>{props.children}</Context.Provider>;
