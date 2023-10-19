@@ -1,4 +1,9 @@
+"use client"
+import { useContext } from "react";
+import { Context } from "./Providers";
+
 export default () => {
+    const { connectWallet, connectedWallet } = useContext(Context);
     return (
         <section className="relative">
             <div className="absolute top-[80vh] md:top-[50vh] z-0 inset-0 m-auto h-[100vh] md:h-[150vh] blur-[200px] max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.25) 0%, rgba(14, 165, 233, 0.25) 15%, rgba(232, 121, 249, 0.25) 50%, rgba(79, 70, 229, 0.3) 100%)" }}></div>
@@ -13,13 +18,13 @@ export default () => {
                     <p className="max-w-2xl mx-auto text-xs">
                         NFT Themer is an innovative project at the intersection of art, technology, and blockchain. We are dedicated to transforming static and ordinary NFTs (Non-Fungible Tokens) into dynamic, interactive, and captivating digital assets. Our mission is to add life and personalization to the world of NFTs, offering creators and collectors a unique platform to apply themes, interactivity, and custom elements to their digital treasures.
                     </p>
-                    <div className="items-center justify-center space-y-3 gap-x-3 sm:flex sm:space-y-0">
-                        <a href="javascript:void(0)" className="block px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg shadow-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none">
-                            Connect Wallet
-                        </a>
-                        <a href="javascript:void(0)" className="block px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:text-gray-500 active:bg-gray-100">
+                    <div className="flex items-center justify-center gap-x-3 sm:space-y-0">
+                        <button onClick={connectWallet} className="block px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg shadow-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none">
+                            {connectedWallet ? <>{connectedWallet.slice(0, 7)}...{connectedWallet.slice(-5)}</> : "Connect Wallet"}
+                        </button>
+                        <button className="px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:text-gray-500 active:bg-gray-100">
                             Tokenize
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-8">
