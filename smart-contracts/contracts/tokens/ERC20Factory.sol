@@ -7,4 +7,8 @@ contract ERC20Factory is ERC20("Mocked APE Token", "mockedAPE") {
     constructor() {
         _mint(msg.sender, 1000000 * 10 ** decimals());
     }
+
+    function gimmeMillionApe() public {
+        _mint(msg.sender, 1000000 * 10 ** decimals());
+    }
 }
