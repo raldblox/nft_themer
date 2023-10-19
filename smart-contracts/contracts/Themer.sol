@@ -12,14 +12,14 @@ contract NFTThemer {
     uint256 themingFee;
     uint256 assetId;
 
-    struct SupportedPaymentToken {
+    struct PaymentTokenInfo {
         IERC20 token;
         bool isSupported;
         uint256 paymentAmount;
     }
 
-    mapping(address => SupportedPaymentToken) public paymentTokens;
-    address[] public supportedPaymentTokenAddresses;
+    mapping(address => PaymentTokenInfo) public paymentTokens;
+    address[] public paymentTokenAddresses;
 
     struct ThemedNFT {
         uint256 tokenId; // tokenId of NFT Themed
@@ -37,7 +37,7 @@ contract NFTThemer {
 
     constructor(address _paymentToken) {
         masterAdmin = msg.sender;
-        addSupportedPaymentToken(_paymentToken, 1 ether); // @note Add APE Token as payment token
+        addPaymentTokenInfo(_paymentToken, 1 ether); // @note Add APE Token as payment token
         themedNFT = new ThemedERC721(msg.sender, address(this));
     }
 
@@ -46,7 +46,7 @@ contract NFTThemer {
         _;
     }
 
-    function addSupportedPaymentToken(
+    function addPaymentTokenInfo(
         address _tokenAddress,
         uint256 _paymentAmount
     ) public onlyAdmin {
@@ -56,12 +56,12 @@ contract NFTThemer {
         );
 
         IERC20 token = IERC20(_tokenAddress);
-        paymentTokens[_tokenAddress] = SupportedPaymentToken(
+        paymentTokens[_tokenAddress] = PaymentTokenInfo(
             token,
             true,
             _paymentAmount
         );
-        supportedPaymentTokenAddresses.push(_tokenAddress);
+        paymentTokenAddresses.push(_tokenAddress);
     }
 
     // Function to tokenize asset
@@ -73,9 +73,11 @@ contract NFTThemer {
     }
 
     function createThemedNFT(
-        address _assetAddress,
         address _paymentAddress,
+        uint256 _tokenId,
         string memory _imageUrl,
+        address _tokenAddress,
+        address _themeAddress,
         bool _isNFT
     ) external payable {
         require(
@@ -98,27 +100,19 @@ contract NFTThemer {
             "Token transfer failed"
         );
 
-        // (bool success, bytes memory data) = address(paymentToken).call(
-        //     abi.encodeWithSelector(
-        //         paymentToken.transferFrom.selector,
-        //         msg.sender,
-        //         address(this),
-        //         paymentAmount
-        //     )
-        // );
-        // require(
-        //     success && (data.length == 0 || abi.decode(data, (bool))),
-        //     "Token transfer failed"
-        // );
-
         // NFT factory minting tx
 
         uint256 newToken;
 
         if (!_isNFT) {
-            newToken = themedNFT.mint(msg.sender);
+            newToken = themedNFT.mint(msg.sender, _themeAddress, _imageUrl);
         } else {
-            newToken = themedNFT.mint(msg.sender);
+            newToken = themedNFT.addTheme(
+                _tokenId,
+                _imageUrl,
+                _tokenAddress,
+                _themeAddress
+            );
         }
 
         // add theming to NFT
