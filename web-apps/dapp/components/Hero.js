@@ -1,19 +1,67 @@
 "use client"
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "./Providers";
+import Dropzone from "react-dropzone";
 
 export default () => {
     const { connectWallet, connectedWallet } = useContext(Context);
+    const [image, setImage] = useState("")
+    const [base64Image, setBase64Image] = useState("")
+
+    const [steps, setStep] = useState({
+        stepsItems: ["Upload", "Select Theme", "Select Network", "Done"],
+        currentStep: 0
+    })
+
+    const handleDrop = (acceptedFiles) => {
+        if (acceptedFiles && acceptedFiles.length > 0) {
+            const file = acceptedFiles[0];
+            const imageUrl = URL.createObjectURL(file);
+            setImage(imageUrl);
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                setBase64Image(reader.result);
+                console.log(reader.result)
+            };
+
+            reader.readAsDataURL(file);
+
+            setStep({
+                ...steps,
+                currentStep: 1,
+            });
+        }
+    };
+
+    const clearImage = () => {
+        setImage(null);
+
+        setStep({
+            ...steps,
+            currentStep: 0,
+        });
+    };
+
+    const uploadImage = () => {
+        setStep({
+            ...steps,
+            currentStep: 2,
+        });
+    };
+
+
     return (
         <section className="relative">
             <div className="absolute top-[80vh] md:top-[50vh] z-0 inset-0 m-auto h-[100vh] md:h-[150vh] blur-[200px] max-w-screen-xl" style={{ background: "linear-gradient(85deg, rgba(192, 132, 252, 0.25) 0%, rgba(14, 165, 233, 0.25) 15%, rgba(232, 121, 249, 0.25) 50%, rgba(79, 70, 229, 0.3) 100%)" }}></div>
-            <div className="relative max-w-screen-xl gap-12 px-4 mx-auto space-y-16 text-gray-200 py-28 md:px-8">
+            <div className="relative max-w-screen-lg gap-12 px-4 mx-auto space-y-16 text-gray-200 py-28 md:px-8">
                 <div className="max-w-3xl mx-auto space-y-5 text-center">
                     <h1 className="text-base font-medium text-[#00b8ff]">
                         Built to Make Your NFTs Pop! 🎉
                     </h1>
                     <h2 className="mx-auto text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-[#ffffff] to-[#939393] md:text-6xl">
-                        Breathe Life into your NFTs with <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff00c1] via-[#4900ff] to-[#00fff9]">NFT Themers</span>
+                        Breathe Life into your NFTs with <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff00c1] via-[#4900ff] to-[#00fff9]">NFT Themer</span>
                     </h2>
                     <p className="max-w-2xl mx-auto text-xs">
                         NFT Themer is an innovative project at the intersection of art, technology, and blockchain. We are dedicated to transforming static and ordinary NFTs (Non-Fungible Tokens) into dynamic, interactive, and captivating digital assets. Our mission is to add life and personalization to the world of NFTs, offering creators and collectors a unique platform to apply themes, interactivity, and custom elements to their digital treasures.
@@ -28,13 +76,74 @@ export default () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-8">
-                    <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:rounded-[50px] border-2 border-gray-600 bg-[#ffffff39]">
-                        <h1 className="text-2xl font-bold text-center">Select Theme</h1>
-                        <ul className="grid z-10 rounded-[30px] aspect-square md:aspect-auto overflow-y-scroll content-start md:grid-cols-3 gap-4">
-                            <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                            <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                            <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                        </ul>
+                    <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:rounded-[50px] border-2 border-gray-600 bg-[#ffffff25]">
+                        <div className="max-w-2xl px-4 mx-auto md:px-0">
+                            <ul aria-label="Steps" className="items-center font-medium text-gray-300 md:flex">
+                                {steps.stepsItems.map((item, idx) => (
+                                    <li aria-current={steps.currentStep == idx + 1 ? "step" : false} className="flex gap-x-3 md:flex-col md:flex-1 md:gap-x-0">
+                                        <div className="flex flex-col items-center md:flex-row md:flex-1">
+                                            <hr className={`w-full border hidden md:block ${idx == 0 ? "border-none" : "" || steps.currentStep >= idx + 1 ? "border-blue-300" : ""}`} />
+                                            <div className={`w-8 h-8 rounded-full border-2 flex-none flex items-center justify-center ${steps.currentStep > idx + 1 ? "bg-blue-300 border-blue-300" : "" || steps.currentStep == idx + 1 ? "border-blue-300" : ""}`}>
+                                                <span className={`w-2.5 h-2.5 rounded-full bg-[#ff00c1] ${steps.currentStep != idx + 1 ? "hidden" : ""}`}></span>
+                                                {
+                                                    steps.currentStep > idx + 1 ? (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                        </svg>
+                                                    ) : ""
+                                                }
+                                            </div>
+                                            <hr className={`h-12 border md:w-full md:h-auto ${idx + 1 == steps.stepsItems.length ? "border-none" : "" || steps.currentStep > idx + 1 ? "border-blue-300" : ""}`} />
+                                        </div>
+                                        <div className="flex items-center justify-center h-8 md:mt-3 md:h-auto">
+                                            <h3 className={`text-sm font-bold uppercase ${steps.currentStep == idx + 1 ? "text-white" : ""}`}>
+                                                {item}
+                                            </h3>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        {steps.currentStep == 0 &&
+                            <div className="grid-cols-3 bg-gray-200 h-[25vh] rounded-[30px]">
+                                <Dropzone onDrop={handleDrop}>
+                                    {({ getRootProps, getInputProps }) => (
+                                        <section className="flex items-center justify-center h-full p-8 border-2 border-black border-dashed rounded-[30px]">
+                                            <div {...getRootProps()}>
+                                                <input {...getInputProps()} />
+                                                <label htmlFor="file" className="m-4 text-center cursor-pointer md:p-8">
+                                                    <svg className="w-10 h-10 mx-auto" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12.1667 26.6667C8.48477 26.6667 5.5 23.6819 5.5 20C5.5 16.8216 7.72428 14.1627 10.7012 13.4949C10.5695 12.9066 10.5 12.2947 10.5 11.6667C10.5 7.0643 14.231 3.33334 18.8333 3.33334C22.8655 3.33334 26.2288 6.19709 27.0003 10.0016C27.0556 10.0006 27.1111 10 27.1667 10C31.769 10 35.5 13.731 35.5 18.3333C35.5 22.3649 32.6371 25.7279 28.8333 26.5M25.5 21.6667L20.5 16.6667M20.5 16.6667L15.5 21.6667M20.5 16.6667L20.5 36.6667" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <p className="max-w-xs mx-auto mt-3 text-black">
+                                                        Click to <span className="font-medium text-blue-800">upload your digital asset</span> or drag and drop your file here
+                                                    </p>
+                                                </label>
+                                            </div>
+                                        </section>
+                                    )}
+                                </Dropzone>
+                            </div>}
+                        {steps.currentStep == 1 &&
+                            <div className="grid-cols-3 p-8 flex items-center justify-center mx-auto bg-transparent rounded-[30px]">
+                                {image && (
+                                    <div className="space-y-4 rounded-[30px]">
+                                        <img src={image} alt="Uploaded" className="h-full rounded-3xl" />
+                                        <div className="flex justify-center gap-4">
+                                            <button onClick={clearImage} className="text-lg font-bold text-white">Clear Image</button>
+                                            <button onClick={uploadImage} className="block px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg shadow-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none">
+                                                UPLOAD
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>}
+                        {steps.currentStep == 2 &&
+                            <ul className="grid z-10 rounded-[30px] aspect-square md:aspect-auto overflow-y-scroll content-start md:grid-cols-3 gap-4">
+                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
+                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
+                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
+                            </ul>}
                     </div>
                     <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:ounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
                         <h1 className="text-2xl font-bold text-center">Select Your NFT</h1>

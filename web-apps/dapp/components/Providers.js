@@ -7,6 +7,8 @@ export const Context = createContext();
 
 export const Providers = (props) => {
     const [connectedWallet, setConnectedWallet] = useState("");
+    
+
     const connectWallet = async () => {
         try {
             const { ethereum } = window;
@@ -53,6 +55,7 @@ export const Providers = (props) => {
     const value = {
         connectWallet,
         connectedWallet,
+        steps, setStep
     };
 
     return <Context.Provider value={value}>{props.children}</Context.Provider>;
