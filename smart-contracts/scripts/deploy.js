@@ -70,9 +70,9 @@ async function main() {
 
   // Get the totalSupply after minting from the NFT Factory
   const totalSupplyAfter = await nftFactory.totalSupply();
-  console.log("TotalSupply after mint: ", totalSupplyAfter.toString());
-  console.log("Token Address: ", await nftFactory.tokenThemeAddress(1));
-  console.log("Theme URI: ", await nftFactory.tokenURI(1));
+  // console.log("TotalSupply after mint: ", totalSupplyAfter.toString());
+  // console.log("Token Address: ", await nftFactory.tokenThemeAddress(1));
+  // console.log("Theme URI: ", await nftFactory.tokenURI(1));
 }
 
 main()
