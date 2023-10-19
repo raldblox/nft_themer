@@ -1,32 +1,36 @@
 "use client"
-import { useContext, useState } from "react";
+
+import { useContext, useEffect, useState } from "react";
 import { Context } from "./Providers";
 import Dropzone from "react-dropzone";
+import { NFTStorage } from "nft.storage";
+import Card from "./Card";
 
 export default () => {
     const { connectWallet, connectedWallet } = useContext(Context);
     const [image, setImage] = useState("")
-    const [base64Image, setBase64Image] = useState("")
+    const [selectedImage, setSelectedImage] = useState("")
+    const [imageURL, setImageURL] = useState("")
+    const [uploading, setUploading] = useState("")
 
     const [steps, setStep] = useState({
-        stepsItems: ["Upload", "Select Theme", "Select Network", "Done"],
+        stepsItems: ["Upload", "Theming", "Select Network", "Done"],
         currentStep: 0
     })
 
     const handleDrop = (acceptedFiles) => {
         if (acceptedFiles && acceptedFiles.length > 0) {
             const file = acceptedFiles[0];
+            setSelectedImage(file);
             const imageUrl = URL.createObjectURL(file);
             setImage(imageUrl);
+            console.log("Image Selected")
 
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                setBase64Image(reader.result);
-                console.log(reader.result)
-            };
-
-            reader.readAsDataURL(file);
+            // const reader = new FileReader();
+            // reader.onload = () => {
+            //     setBase64Image(imageUrl);
+            // };
+            // reader.readAsDataURL(file);
 
             setStep({
                 ...steps,
@@ -44,13 +48,43 @@ export default () => {
         });
     };
 
-    const uploadImage = () => {
+    const selectNetwork = () => {
+        setStep({
+            ...steps,
+            currentStep: 3,
+        });
+    };
+
+    const uploadImage = async () => {
+        const nftStorage = new NFTStorage({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU0YTU3MjUwMjJDMWNmNjQ3NEVkQ0U5QzQ1MTJkQTUwQWUwOWYyYTUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5NzczNjQ3MDQyMSwibmFtZSI6Ik9DVkxBQlMifQ.JOkVvi3ZUQHPBmce9Nk65X_OliFs1UbYvnECHQNB7Wo", });
+        try {
+            setUploading(true);
+            const fileName = selectedImage.name;
+            const fileExtension = fileName.split(".").pop();
+            const file = new File([selectedImage], `nft.${fileExtension}`)
+            const metaData = await nftStorage.store({
+                name: "Image",
+                description: 'Uploaded at NFT Themer',
+                image: file,
+            });
+            const metadataURL = `https://cloudflare-ipfs.com/ipfs/${metaData.ipnft}/metadata.json`;
+            const metadataResponse = await fetch(metadataURL);
+            const metadata = await metadataResponse.json();
+            const imageURL = metadata.image;
+            const imageCID = imageURL.split('//')[1].split('/')[0];
+            const gatewayUrl = `https://cloudflare-ipfs.com/ipfs/${imageCID}/nft.${fileExtension}`;
+            setImageURL(gatewayUrl);
+            console.log(gatewayUrl);
+            setUploading(false);
+        } catch (error) {
+            console.log(error);
+            setUploading(false);
+        }
         setStep({
             ...steps,
             currentStep: 2,
         });
     };
-
 
     return (
         <section className="relative">
@@ -105,8 +139,8 @@ export default () => {
                             </ul>
                         </div>
                         {steps.currentStep == 0 &&
-                            <div className="grid-cols-3 bg-gray-200 h-[25vh] rounded-[30px]">
-                                <Dropzone onDrop={handleDrop}>
+                            <div className="grid-cols-3 bg-gray-200 h-[30vh] rounded-[30px]">
+                                <Dropzone onDrop={handleDrop} disabled={!connectedWallet}>
                                     {({ getRootProps, getInputProps }) => (
                                         <section className="flex items-center justify-center h-full p-8 border-2 border-black border-dashed rounded-[30px]">
                                             <div {...getRootProps()}>
@@ -131,19 +165,20 @@ export default () => {
                                         <img src={image} alt="Uploaded" className="h-full rounded-3xl" />
                                         <div className="flex justify-center gap-4">
                                             <button onClick={clearImage} className="text-lg font-bold text-white">Clear Image</button>
-                                            <button onClick={uploadImage} className="block px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg shadow-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none">
-                                                UPLOAD
+                                            <button disabled={uploading} onClick={uploadImage} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
+                                                {uploading ? "UPLOADING" : "UPLOAD"}
                                             </button>
                                         </div>
                                     </div>
                                 )}
                             </div>}
                         {steps.currentStep == 2 &&
-                            <ul className="grid z-10 rounded-[30px] aspect-square md:aspect-auto overflow-y-scroll content-start md:grid-cols-3 gap-4">
-                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                                <li className="col-span-1 rounded-[30px] border aspect-square border-1 border-gray-700 bg-white"></li>
-                            </ul>}
+                            <div className="z-10 flex justify-center w-full gap-4">
+                                <Card image={imageURL} />
+                                <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
+                                    Continue
+                                </button>
+                            </div>}
                     </div>
                     <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:ounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
                         <h1 className="text-2xl font-bold text-center">Select Your NFT</h1>
