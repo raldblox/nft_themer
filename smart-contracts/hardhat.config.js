@@ -43,12 +43,13 @@ module.exports = {
   },
   etherscan: {
     // apiKey: process.env.POLYGON_ETHERSCAN,
-    // apiKey: process.env.ETHERSCAN,
+    apiKey: process.env.ETHERSCAN,
     // apiKey: {
     //   scrollSepolia: 'abc',
     // },
     apiKey: {
       zkEVM: process.env.ZKEVM_ETHERSCAN,
+      mantleTest: process.env.ETHERSCAN,
     },
     customChains: [
       {
