@@ -75,8 +75,7 @@ export default () => {
             });
 
             const metadataURL = `https://nft-themer.vercel.app/api/proxy?ipnft=${metaData.ipnft}`;
-
-            // Use proxy API route to fetch the remote metadata
+            console.log(metaData.ipnft);
             const metadataResponse = await fetch(metadataURL);
             if (!metadataResponse.ok) {
                 throw new Error("Failed to fetch metadata.");
@@ -89,7 +88,7 @@ export default () => {
             setImageURL(gatewayUrl);
             console.log(gatewayUrl);
             setUploading(false);
-            
+
             if (gatewayUrl) {
                 setStep({
                     ...steps,

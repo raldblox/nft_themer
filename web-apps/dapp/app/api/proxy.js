@@ -3,8 +3,6 @@ import fetch from 'node-fetch';
 export default async (req, res) => {
     try {
         const { query } = req;
-
-        // Extract the "ipnft" parameter from the query
         const { ipnft } = query;
 
         if (!ipnft) {
@@ -12,7 +10,7 @@ export default async (req, res) => {
         }
 
         // Construct the NFT.Storage metadata URL
-        const nftStorageURL = `https://api.nft.storage/ipfs/${ipnft}/metadata.json`;
+        const nftStorageURL = `https://cloudflare-ipfs.com/ipfs/${ipnft}/metadata.json`;
 
         // Fetch the metadata from NFT.Storage
         const response = await fetch(nftStorageURL);
