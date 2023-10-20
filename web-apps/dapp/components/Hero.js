@@ -93,6 +93,9 @@ export default () => {
 
     const handleMint = async (encryptedURL) => {
         try {
+            if (!imageURL) {
+                return
+            }
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const themerContract = new ethers.Contract(
                 mumbai.themer,
@@ -219,7 +222,7 @@ export default () => {
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={image} />
                                 <Network />
-                                <button disabled={uploading} onClick={handleMint} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
+                                <button disabled={!imageURL} onClick={handleMint} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     Process
                                 </button>
                             </div>}
