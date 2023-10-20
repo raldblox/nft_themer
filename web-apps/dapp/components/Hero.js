@@ -17,6 +17,7 @@ export default () => {
     const [selectedImage, setSelectedImage] = useState("")
     const [imageURL, setImageURL] = useState("")
     const [uploading, setUploading] = useState("")
+    const [processing, setProcessing] = useState("")
     const [txHash, setTxHash] = useState("")
 
     const [steps, setStep] = useState({
@@ -150,7 +151,7 @@ export default () => {
         const tokenAddress = mumbai.apeToken;
         const tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
         const spenderAddress = mumbai.themer;
-        const approvalAmount = ethers.constants.MaxUint256;
+        const approvalAmount = ethers.utils.parseEther("100");
 
         try {
             const approvalTx = await tokenContract.approve(spenderAddress, approvalAmount);
@@ -162,6 +163,7 @@ export default () => {
     };
 
     const handleMint = async (encryptedURL) => {
+        setProcessing(true);
         try {
             if (!imageURL) {
                 return
@@ -182,7 +184,7 @@ export default () => {
             const spenderAddress = mumbai.themer;
             const approvalRequired = await tokenContract.allowance(provider.getSigner().getAddress(), spenderAddress);
 
-            if (approvalRequired.lt(ethers.constants.MaxUint256)) {
+            if (approvalRequired.lt(ethers.utils.parseEther("1"))) {
                 await approveTokens();
             }
 
@@ -198,11 +200,12 @@ export default () => {
             } else {
                 alert("Minting Failed")
             }
-            return tx;
+            setProcessing(false);
 
         } catch (error) {
             console.log(error);
         }
+        setProcessing(false);
     }
 
     return (
@@ -302,9 +305,9 @@ export default () => {
                         {steps.currentStep == 3 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={image} />
-                                <Network />
+                                {/* <Network /> */}
                                 <button disabled={!imageURL} onClick={handleMint} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
-                                    Process
+                                    {processing ? "Processing" : "Process"}
                                 </button>
                             </div>}
                         {steps.currentStep == 4 &&
