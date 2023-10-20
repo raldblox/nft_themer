@@ -3,11 +3,11 @@ import { useState } from "react"
 export default () => {
 
     const paymentTokens = [
-        "APE COIN", "USDT", "FIL", "USDC"
+        "APE COIN", "USDT", "USDC", "MNT"
     ]
 
     const networks = [
-        "Filecoin", "Scroll", "Mumbai", "Goerli"
+        "Mantle Testnet", "Scroll Testnet", "Polygon Mumbai", "Polygon zkEVM"
     ]
 
     const [selectedToken, setSelectedToken] = useState({

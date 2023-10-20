@@ -305,7 +305,7 @@ export default () => {
                         {steps.currentStep == 3 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={image} />
-                                {/* <Network /> */}
+                                <Network />
                                 <button disabled={!imageURL} onClick={handleMint} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     {processing ? "Processing" : "Process"}
                                 </button>
