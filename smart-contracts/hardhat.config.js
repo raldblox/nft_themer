@@ -44,8 +44,11 @@ module.exports = {
   etherscan: {
     // apiKey: process.env.POLYGON_ETHERSCAN,
     // apiKey: process.env.ETHERSCAN,
+    // apiKey: {
+    //   scrollSepolia: 'abc',
+    // },
     apiKey: {
-      scrollSepolia: 'abc',
+      zkEVM: process.env.ZKEVM_ETHERSCAN,
     },
     customChains: [
       {
@@ -62,6 +65,14 @@ module.exports = {
         urls: {
           apiURL: 'https://sepolia-blockscout.scroll.io/api',
           browserURL: 'https://sepolia-blockscout.scroll.io/',
+        },
+      },
+      {
+        network: 'zkEVM',
+        chainId: 1442,
+        urls: {
+          apiURL: 'https://api-zkevm.polygonscan.com/api',
+          browserURL: 'https://testnet-zkevm.polygonscan.com',
         },
       },
     ]
