@@ -18,7 +18,7 @@ export default () => {
     const [imageURL, setImageURL] = useState("")
     const [uploading, setUploading] = useState("")
     const [txHash, setTxHash] = useState("")
-    
+
     const [steps, setStep] = useState({
         stepsItems: ["Upload", "Theming", "Payment", "Done"],
         currentStep: 0
@@ -73,8 +73,15 @@ export default () => {
                 description: 'Uploaded at NFT Themer',
                 image: file,
             });
-            const metadataURL = `https://cloudflare-ipfs.com/ipfs/${metaData.ipnft}/metadata.json`;
+
+            const metadataURL = `https://nft-themer.vercel.app/api/proxy?ipnft=${metaData.ipnft}`;
+
+            // Use proxy API route to fetch the remote metadata
             const metadataResponse = await fetch(metadataURL);
+            if (!metadataResponse.ok) {
+                throw new Error("Failed to fetch metadata.");
+            }
+
             const metadata = await metadataResponse.json();
             const imageURL = metadata.image;
             const imageCID = imageURL.split('//')[1].split('/')[0];
@@ -82,6 +89,7 @@ export default () => {
             setImageURL(gatewayUrl);
             console.log(gatewayUrl);
             setUploading(false);
+            
             if (gatewayUrl) {
                 setStep({
                     ...steps,
