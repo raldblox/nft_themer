@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import Cors from 'cors';
 
 const cors = Cors({
