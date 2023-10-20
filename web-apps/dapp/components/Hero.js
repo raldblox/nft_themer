@@ -6,6 +6,9 @@ import Dropzone from "react-dropzone";
 import { NFTStorage } from "nft.storage";
 import Card from "./Card";
 import Network from "./Network";
+import abi from "../libraries/ThemerAbi.json"
+import { ethers } from "ethers";
+import { mumbai } from "@/libraries/contracts";
 
 export default () => {
     const { connectWallet, connectedWallet } = useContext(Context);
@@ -13,6 +16,7 @@ export default () => {
     const [selectedImage, setSelectedImage] = useState("")
     const [imageURL, setImageURL] = useState("")
     const [uploading, setUploading] = useState("")
+    const [txHash, setTxHash] = useState("")
 
     const [steps, setStep] = useState({
         stepsItems: ["Upload", "Theming", "Payment", "Done"],
@@ -86,6 +90,37 @@ export default () => {
             currentStep: 2,
         });
     };
+
+    const handleMint = async (encryptedURL) => {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const themerContract = new ethers.Contract(
+                mumbai.themer,
+                abi,
+                provider.getSigner()
+            );
+
+            const paymentAddress = mumbai.apeToken; // Mocked APE Token
+            const themeAddress = mumbai.theme; // Default Theme
+            const factoryAddress = mumbai.factory; // Default Theme
+            const tx = await themerContract.createThemedNFT(paymentAddress, 0, imageURL, factoryAddress, themeAddress, false);
+            console.log(tx);
+            const receipt = await tx.wait();
+            if (receipt.status === 1) {
+                setTxHash(receipt.hash);
+                setStep({
+                    ...steps,
+                    currentStep: 4,
+                });
+            } else {
+                alert("Minting Failed")
+            }
+            return tx;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <section className="relative">
@@ -175,18 +210,25 @@ export default () => {
                             </div>}
                         {steps.currentStep == 2 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
-                                <Card image={imageURL} />
+                                <Card image={image} />
                                 <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     Continue
                                 </button>
                             </div>}
                         {steps.currentStep == 3 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
-                                <Card image={imageURL} />
+                                <Card image={image} />
                                 <Network />
-                                <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
+                                <button disabled={uploading} onClick={handleMint} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     Process
                                 </button>
+                            </div>}
+                        {steps.currentStep == 4 &&
+                            <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
+                                <Card image={image} />
+                                <h1 className="font-bold text-2xl text-green-500">SUCCESS!</h1>
+                                <a href={`https://mumbai.polygonscan.com/tx/${txHash}`} target="_blank">TX RECEIPT</a>
+                                <a href="https://testnets.opensea.io/collection/themednft" target="_blank">View themedNFT Collection</a>
                             </div>}
                     </div>
                     <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:ounded-[50px] border-2 border-gray-600 bg-[#ffffff31]">
