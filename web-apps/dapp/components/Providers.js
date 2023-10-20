@@ -2,12 +2,15 @@
 
 import { ethers } from "ethers";
 import React, { createContext, useEffect, useState } from "react";
+import apeAbi from "../libraries/ApeTokenAbi.json"
+import { mumbai } from "@/libraries/contracts";
 
 export const Context = createContext();
 
 export const Providers = (props) => {
     const [connectedWallet, setConnectedWallet] = useState("");
-    
+    const [apeBalance, setApeBlance] = useState("")
+
 
     const connectWallet = async () => {
         try {
@@ -46,6 +49,14 @@ export const Providers = (props) => {
         } else {
             console.log("No authorized account found");
         }
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const tokenABI = apeAbi;
+        const tokenAddress = mumbai.apeToken;
+        const tokenContract = new ethers.Contract(tokenAddress, tokenABI, provider.getSigner());
+        const connectedWalletAddress = provider.getSigner().getAddress();
+        const apeBalance = await tokenContract.balanceOf(connectedWalletAddress);
+        const formattedBalance = ethers.utils.formatEther(apeBalance);
+        setApeBlance(formattedBalance);
     };
 
     useEffect(() => {
@@ -54,7 +65,9 @@ export const Providers = (props) => {
 
     const value = {
         connectWallet,
-        connectedWallet
+        connectedWallet,
+        apeBalance,
+        setApeBlance
     };
 
     return <Context.Provider value={value}>{props.children}</Context.Provider>;

@@ -7,17 +7,18 @@ import { NFTStorage } from "nft.storage";
 import Card from "./Card";
 import Network from "./Network";
 import abi from "../libraries/ThemerAbi.json"
+import apeAbi from "../libraries/ApeTokenAbi.json"
 import { ethers } from "ethers";
 import { mumbai } from "@/libraries/contracts";
 
 export default () => {
-    const { connectWallet, connectedWallet } = useContext(Context);
+    const { connectWallet, connectedWallet, apeBalance, setApeBlance } = useContext(Context);
     const [image, setImage] = useState("")
     const [selectedImage, setSelectedImage] = useState("")
     const [imageURL, setImageURL] = useState("")
     const [uploading, setUploading] = useState("")
     const [txHash, setTxHash] = useState("")
-
+    
     const [steps, setStep] = useState({
         stepsItems: ["Upload", "Theming", "Payment", "Done"],
         currentStep: 0
@@ -94,6 +95,47 @@ export default () => {
 
     };
 
+    const apeFaucet = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const tokenABI = apeAbi;
+        const tokenAddress = mumbai.apeToken;
+        const tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
+        try {
+            const approvalTx = await tokenContract.gimmeMillionApe();
+            await approvalTx.wait();
+            console.log("Ape Token now on its way!");
+        } catch (error) {
+            console.error('Error faucet:', error);
+        }
+        try {
+            const apeBalance = await tokenContract.balanceOf(connectedWallet);
+            const formattedBalance = ethers.utils.formatEther(apeBalance);
+            console.log("Ape Balance:", formattedBalance);
+            setApeBlance(formattedBalance);
+        } catch (error) {
+            console.error('Error faucet:', error);
+        }
+    };
+
+    const approveTokens = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const tokenABI = apeAbi;
+        const tokenAddress = mumbai.apeToken;
+        const tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
+        const spenderAddress = mumbai.themer;
+        const approvalAmount = ethers.constants.MaxUint256;
+
+        try {
+            const approvalTx = await tokenContract.approve(spenderAddress, approvalAmount);
+            await approvalTx.wait();
+            console.log(`Approved ${approvalAmount.toString()} tokens for ${spenderAddress}`);
+        } catch (error) {
+            console.error('Error approving tokens:', error);
+        }
+    };
+
     const handleMint = async (encryptedURL) => {
         try {
             if (!imageURL) {
@@ -109,6 +151,16 @@ export default () => {
             const paymentAddress = mumbai.apeToken; // Mocked APE Token
             const themeAddress = mumbai.theme; // Default Theme
             const factoryAddress = mumbai.factory; // Default Theme
+
+            // Check if approval is needed
+            const tokenContract = new ethers.Contract(mumbai.apeToken, apeAbi, provider.getSigner());
+            const spenderAddress = mumbai.themer;
+            const approvalRequired = await tokenContract.allowance(provider.getSigner().getAddress(), spenderAddress);
+
+            if (approvalRequired.lt(ethers.constants.MaxUint256)) {
+                await approveTokens();
+            }
+
             const tx = await themerContract.createThemedNFT(paymentAddress, 0, imageURL, factoryAddress, themeAddress, false);
             console.log(tx);
             const receipt = await tx.wait();
@@ -146,10 +198,11 @@ export default () => {
                         <button onClick={connectWallet} className="block px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg shadow-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none">
                             {connectedWallet ? <>{connectedWallet.slice(0, 7)}...{connectedWallet.slice(-5)}</> : "Connect Wallet"}
                         </button>
-                        <button className="px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:text-gray-500 active:bg-gray-100">
-                            $APE Faucet
+                        <button onClick={apeFaucet} className="px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:text-gray-500 active:bg-gray-100">
+                            Gimme million $APE
                         </button>
                     </div>
+                    <p>Balance: {apeBalance} $APE</p>
                 </div>
                 <div className="grid grid-cols-2 gap-8">
                     <div className="h-full space-y-8 col-span-2 pt-8 p-4 md:p-8 rounded-[25px] md:rounded-[50px] border-2 border-gray-600 bg-[#ffffff25]">
