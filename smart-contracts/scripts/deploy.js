@@ -53,10 +53,10 @@ async function main() {
   const tokenAddress = nftFactory.address;
   const themeAddress = theme.address;
   const tokenId = 1;
-  const imageUrl = "https://cloudflare-ipfs.com/ipfs/bafybeiam7aeft6hplao5silxqyc7or2s6coxo4gcobgbtz3kqivbue253m/nft.svg Hero.js:80:20";
+  const imageUrl = "https://cloudflare-ipfs.com/ipfs/bafybeiam7aeft6hplao5silxqyc7or2s6coxo4gcobgbtz3kqivbue253m/nft.svg";
   const isNFT = false; // Set this to true or false as needed
 
-  const paymentAmount = ethers.utils.parseEther("1"); // Set the payment amount
+  const paymentAmount = ethers.utils.parseEther("0"); // Set the payment amount
 
   const createThemedNFTTx = await themer.createThemedNFT(paymentAddress, tokenId, imageUrl, tokenAddress, themeAddress, isNFT, {
     value: paymentAmount, // Sending ether for payment
