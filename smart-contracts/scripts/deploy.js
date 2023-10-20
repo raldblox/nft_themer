@@ -50,10 +50,10 @@ async function main() {
 
   // Call the createThemedNFT function
   const paymentAddress = mockedAPE.address;
-  const tokenAddress = mockedAPE.address;
+  const tokenAddress = nftFactory.address;
   const themeAddress = theme.address;
   const tokenId = 1;
-  const imageUrl = "https://images.unsplash.com/photo-1557672199-6e8c8b2b8fff?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80";
+  const imageUrl = "https://cloudflare-ipfs.com/ipfs/bafybeiam7aeft6hplao5silxqyc7or2s6coxo4gcobgbtz3kqivbue253m/nft.svg Hero.js:80:20";
   const isNFT = false; // Set this to true or false as needed
 
   const paymentAmount = ethers.utils.parseEther("1"); // Set the payment amount

@@ -84,10 +84,8 @@ contract NFTThemer {
             paymentTokens[_paymentAddress].isSupported,
             "Token not supported"
         );
+
         uint256 paymentAmount = paymentTokens[_paymentAddress].paymentAmount;
-
-        require(msg.value >= paymentAmount, "Payment not enough");
-
         IERC20 paymentToken = paymentTokens[_paymentAddress].token;
 
         require(

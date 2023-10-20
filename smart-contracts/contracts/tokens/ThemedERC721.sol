@@ -72,7 +72,7 @@ contract ThemedERC721 is ERC721("Themed NFT", "themedNFT"), Ownable {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name":"themedNFTs","description":"Themed NFTs""image": "',
+                                '{"name":"themedNFTs","description":"Themed NFTs", "image": "',
                                 tokenData[1].imageUrls,
                                 '"}'
                             )
