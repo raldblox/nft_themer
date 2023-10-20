@@ -1,4 +1,9 @@
 import fetch from 'node-fetch';
+import Cors from 'cors';
+
+const cors = Cors({
+    methods: ['GET'],
+});
 
 export default async (req, res) => {
     try {
@@ -9,10 +14,10 @@ export default async (req, res) => {
             return res.status(400).json({ error: 'Missing "ipnft" parameter.' });
         }
 
-        // Construct the NFT.Storage metadata URL
         const nftStorageURL = `https://cloudflare-ipfs.com/ipfs/${ipnft}/metadata.json`;
 
-        // Fetch the metadata from NFT.Storage
+        await cors(req, res);
+
         const response = await fetch(nftStorageURL);
 
         if (response.ok) {
