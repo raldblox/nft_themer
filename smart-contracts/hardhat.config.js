@@ -39,11 +39,14 @@ module.exports = {
     zkEVM: {
       url: `https://rpc.public.zkevm-test.net`,
       accounts: [process.env.PRIVATE_KEY],
-      },
+    },
   },
   etherscan: {
-    apiKey: process.env.POLYGON_ETHERSCAN,
+    // apiKey: process.env.POLYGON_ETHERSCAN,
     // apiKey: process.env.ETHERSCAN,
+    apiKey: {
+      scrollSepolia: 'abc',
+    },
     customChains: [
       {
         network: "mantleTest",
@@ -52,6 +55,14 @@ module.exports = {
           apiURL: "https://explorer.testnet.mantle.xyz/api",
           browserURL: "https://explorer.testnet.mantle.xyz"
         }
+      },
+      {
+        network: 'scrollSepolia',
+        chainId: 534351,
+        urls: {
+          apiURL: 'https://sepolia-blockscout.scroll.io/api',
+          browserURL: 'https://sepolia-blockscout.scroll.io/',
+        },
       },
     ]
   },
