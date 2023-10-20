@@ -74,21 +74,39 @@ export default () => {
                 image: file,
             });
 
-            const metadataURL = `https://nft-themer.vercel.app/api/proxy?ipnft=${metaData.ipnft}`;
-            console.log(metaData.ipnft);
-            const metadataResponse = await fetch(metadataURL);
-            if (!metadataResponse.ok) {
-                throw new Error("Failed to fetch metadata.");
+            const gateways = [
+                'https://gateway.ipfs.io',
+                'https://ipfs.runfission.com',
+                'https://ipfs.io',
+                'https://nftstorage.link',
+                'https://permaweb.eu.org',
+                'https://cloudflare-ipfs.com',
+            ];
+
+            let metadata;
+            let gatewayUrl;
+
+            for (const gateway of gateways) {
+                const metadataURL = `${gateway}/ipfs/${metaData.ipnft}/metadata.json`;
+                const metadataResponse = await fetch(metadataURL);
+
+                if (metadataResponse.ok) {
+                    metadata = await metadataResponse.json();
+                    const imageURL = metadata.image;
+                    const imageCID = imageURL.split('//')[1].split('/')[0];
+                    gatewayUrl = `https://cloudflare-ipfs.com/ipfs/${imageCID}/nft.${fileExtension}`;
+                    setImageURL(gatewayUrl);
+                    console.log(gatewayUrl);
+                    break; // Stop trying other gateways once successful
+                }
             }
 
-            const metadata = await metadataResponse.json();
-            const imageURL = metadata.image;
-            const imageCID = imageURL.split('//')[1].split('/')[0];
-            const gatewayUrl = `https://cloudflare-ipfs.com/ipfs/${imageCID}/nft.${fileExtension}`;
-            setImageURL(gatewayUrl);
-            console.log(gatewayUrl);
-            setUploading(false);
+            if (!metadata || !gatewayUrl) {
+                // Handle the case where all gateways failed to fetch metadata
+                console.error('Failed to fetch metadata from all gateways.');
+            }
 
+            setUploading(false);
             if (gatewayUrl) {
                 setStep({
                     ...steps,
