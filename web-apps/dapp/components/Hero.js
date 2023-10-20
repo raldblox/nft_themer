@@ -107,7 +107,7 @@ export default () => {
             console.log(tx);
             const receipt = await tx.wait();
             if (receipt.status === 1) {
-                setTxHash(receipt.hash);
+                setTxHash(tx.hash);
                 setStep({
                     ...steps,
                     currentStep: 4,
