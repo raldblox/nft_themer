@@ -81,14 +81,17 @@ export default () => {
             setImageURL(gatewayUrl);
             console.log(gatewayUrl);
             setUploading(false);
+            if (gatewayUrl) {
+                setStep({
+                    ...steps,
+                    currentStep: 2,
+                });
+            }
         } catch (error) {
             console.log(error);
             setUploading(false);
         }
-        setStep({
-            ...steps,
-            currentStep: 2,
-        });
+
     };
 
     const handleMint = async (encryptedURL) => {
