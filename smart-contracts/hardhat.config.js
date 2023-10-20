@@ -27,18 +27,34 @@ module.exports = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+
+    mantle: {
+      url: "https://rpc.mantle.xyz", //mainnet
+      accounts: [process.env.PRIVATE_KEY ?? ''],
+    },
+    mantleTest: {
+      url: "https://rpc.testnet.mantle.xyz", // testnet
+      accounts: [process.env.PRIVATE_KEY ?? '']
+    },
+    zkEVM: {
+      url: `https://rpc.public.zkevm-test.net`,
+      accounts: [process.env.PRIVATE_KEY],
+      },
   },
   etherscan: {
     apiKey: process.env.POLYGON_ETHERSCAN,
+    // apiKey: process.env.ETHERSCAN,
     customChains: [
       {
-        network: "",
-        chainId: 0,
+        network: "mantleTest",
+        chainId: 5001,
         urls: {
-          apiURL: "",
-          browserURL: ""
+          apiURL: "https://explorer.testnet.mantle.xyz/api",
+          browserURL: "https://explorer.testnet.mantle.xyz"
         }
       },
     ]
   },
 };
+
+
