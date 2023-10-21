@@ -1,38 +1,109 @@
-import { useState } from "react"
+import { useState } from "react";
 
 export default () => {
-
     const paymentTokens = [
         "APE COIN", "USDT", "USDC", "MNT"
     ]
 
     const networks = [
-        "Mantle Testnet", "Scroll Testnet", "Polygon Mumbai", "Polygon zkEVM"
-    ]
+        {
+            name: "Polygon Mumbai",
+            symbol: "MATIC",
+            chainId: 80001,
+            details: {
+                apiURL: "https://rpc-mumbai.maticvigil.com",
+                browserURL: "https://mumbai.polygonscan.com",
+            },
+        },
+        {
+            name: "Mantle Testnet",
+            symbol: "MNT",
+            chainId: 5001,
+            details: {
+                apiURL: "https://rpc.testnet.mantle.xyz",
+                browserURL: "https://explorer.testnet.mantle.xyz",
+            },
+        },
+        {
+            name: "Scroll Sepolia",
+            symbol: "ETH",
+            chainId: 534351,
+            details: {
+                apiURL: "https://sepolia-rpc.scroll.io/",
+                browserURL: "https://sepolia.scrollscan.com/",
+            },
+        },
+        {
+            name: "Polygon zkEVM Testnet",
+            symbol: "ETH",
+            chainId: 1442,
+            details: {
+                apiURL: "https://rpc.public.zkevm-test.net",
+                browserURL: "https://zkevm.polygonscan.com/",
+            },
+        },
+    ];
+
+    const switchNetwork = async (chainId, networkDetails) => {
+        if (window.ethereum) {
+            try {
+                await window.ethereum.request({
+                    method: "wallet_switchEthereumChain",
+                    params: [{ chainId: `0x${chainId.toString(16)}` }],
+                });
+            } catch (error) {
+                if (error.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: "wallet_addEthereumChain",
+                            params: [
+                                {
+                                    chainId: `0x${chainId.toString(16)}`,
+                                    chainName: networkDetails.name,
+                                    rpcUrls: [networkDetails.details.apiURL],
+                                    nativeCurrency: {
+                                        name: networkDetails.name,
+                                        symbol: networkDetails.symbol,
+                                        decimals: 18,
+                                    },
+                                    blockExplorerUrls: [networkDetails.details.browserURL],
+                                },
+                            ],
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+                console.log(error);
+            }
+        } else {
+            alert("MetaMask is not installed.");
+        }
+    };
 
     const [selectedToken, setSelectedToken] = useState({
         item: null,
         idx: null
-    })
+    });
 
     const [selectedNetwork, setSelectedNetwork] = useState({
         item: null,
         idx: null
-    })
+    });
 
-    const [state, setState] = useState(false)
+    const [state, setState] = useState(false);
 
     const handleSearch = (e) => {
-        const menuEls = document.querySelectorAll('.menu-el-js')
-        const searchVal = e.target.value.toLocaleLowerCase()
+        const menuEls = document.querySelectorAll('.menu-el-js');
+        const searchVal = e.target.value.toLowerCase();
 
         menuEls.forEach(el => {
-            el.classList.remove("hidden")
-            if (!el.textContent.toLocaleLowerCase().includes(searchVal)) {
-                el.classList.add("hidden")
+            el.classList.remove("hidden");
+            if (!el.textContent.toLowerCase().includes(searchVal)) {
+                el.classList.add("hidden");
             }
-        })
-    }
+        });
+    };
 
     return (
         <div className="relative w-[250px] px-4 mx-auto text-[15px]">
@@ -70,15 +141,15 @@ export default () => {
                                                 setSelectedToken({
                                                     item: el,
                                                     idx
-                                                })
-                                                setState(false)
+                                                });
+                                                setState(false);
                                             }}
                                             role="option"
-                                            className={`${selectedToken.idx == idx ? 'text-indigo-600 bg-indigo-50' : ''} menu-el-js flex items-center justify-between px-3 cursor-default py-2 duration-150 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50`}
+                                            className={`${selectedToken.idx === idx ? 'text-indigo-600 bg-indigo-50' : ''} menu-el-js flex items-center justify-between px-3 cursor-pointer py-2 duration-150 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50`}
                                         >
                                             {el}
                                             {
-                                                selectedToken.idx == idx ? (
+                                                selectedToken.idx === idx ? (
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                     </svg>
@@ -100,16 +171,17 @@ export default () => {
                             key={idx}
                             onClick={() => {
                                 setSelectedNetwork({
-                                    item: el,
+                                    item: el.name,
                                     idx
-                                })
+                                });
+                                switchNetwork(el.chainId, el);
                             }}
                             role="option"
-                            className={`${selectedNetwork.idx == idx ? 'text-indigo-600 bg-indigo-50' : 'bg-gray-600'} menu-el-js flex items-center justify-between px-3 cursor-default py-2 duration-150 text-gray-300 hover:text-indigo-600 hover:bg-indigo-50`}
+                            className={`${selectedNetwork.idx === idx ? 'text-indigo-600 bg-indigo-50' : 'bg-gray-600'} menu-el-js flex items-center justify-between px-3 cursor-pointer py-2 duration-150 text-gray-300 hover:text-indigo-600 hover:bg-indigo-50`}
                         >
-                            {el}
+                            {el.name}
                             {
-                                selectedNetwork.idx == idx ? (
+                                selectedNetwork.idx === idx ? (
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>

@@ -313,7 +313,7 @@ export default () => {
                         {steps.currentStep == 4 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={image} />
-                                <h1 className="font-bold text-2xl text-green-500">SUCCESS!</h1>
+                                <h1 className="text-2xl font-bold text-green-500">SUCCESS!</h1>
                                 <a href={`https://mumbai.polygonscan.com/tx/${txHash}`} target="_blank">TX RECEIPT</a>
                                 <a href="https://testnets.opensea.io/collection/themednft" target="_blank">View themedNFT Collection</a>
                             </div>}
