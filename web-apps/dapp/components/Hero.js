@@ -298,6 +298,19 @@ export default () => {
                         {steps.currentStep == 2 &&
                             <div className="z-10 flex flex-col items-center justify-center w-full gap-8">
                                 <Card image={image} />
+                                <div className="w-[300px] overflow-y-auto max-h-64">
+                                    <h1 className="py-2 pt-8 font-bold text-center">Select Theme</h1>
+                                    <li role="option"
+                                        className={`bg-indigo-50  menu-el-js flex items-center justify-between px-3 cursor-pointer py-2 duration-150 text-indigo-600 hover:bg-gray-400`}
+                                    >
+                                        3D Interactive Card (Selected)
+                                    </li>
+                                    <li role="option"
+                                        className={`bg-indigo-50 opacity-50 menu-el-js flex items-center justify-between px-3 cursor-pointer py-2 duration-150 text-indigo-600 hover:bg-gray-200`}
+                                    >
+                                        Holographic Card (Coming Soon)
+                                    </li>
+                                </div>
                                 <button disabled={uploading} onClick={selectNetwork} className={`${uploading && "animate-pulse"} px-4 py-2 font-medium text-white duration-150 bg-[#4900ff] rounded-lg hover:bg-[#ff00c1] active:bg-indigo-700 hover:shadow-none`}>
                                     Continue
                                 </button>
